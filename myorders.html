@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #4dabf7 0%, #6c63ff 100%);
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav-button {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .warning-message {
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(255, 167, 38, 0.2);
+            text-align: center;
+            color: #E65100;
+            font-weight: 500;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: auto;
+        }
+
+        .order-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .order-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #4a5568;
+            border-bottom: 2px solid #e2e8f0;
+            background-color: #f8fafc;
+        }
+
+        .order-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #4a5568;
+        }
+
+        .order-table tr:hover {
+            background-color: #f7fafc;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            text-align: center;
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        .token-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            width: fit-content;
+            margin: 0 auto;
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+        }
+
+        .download-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(45deg, #00C853, #69F0AE);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0 auto;
+        }
+
+        .payment-btn {
+            padding: 8px 16px;
+            background: #6c63ff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .qr-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            position: relative;
+            max-width: 90%;
+            width: 450px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-content">
+            <h1 class="nav-title">My Orders</h1>
+            <a href="studentdashboard.html"><button class="nav-button">🏠 Back to Dashboard</button></a>
+        </div>
+    </div>
+
+    <div class="content-container">
+        <div class="warning-message">
+            ⚠️ Note: Orders must be received within one hour of placing. Orders not collected within this time will be automatically cancelled.
+        </div>
+
+        <div class="table-container">
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>Date/Time</th>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>Token</th>
+                        <th>Payment</th>
+                        
+                    </tr>
+                </thead>
+                <tbody id="orderTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- QR Modal -->
+    <div class="qr-modal" id="qrModal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 1rem; color: #2d3748">Scan QR to Pay</h3>
+            <img src="/images/create.png" alt="Payment QR Code" style="width: 250px; height: 250px; object-fit: contain; border-radius: 8px;">
+            <p style="text-align: center; margin: 1rem 0; color: #4a5568;">Please scan this QR code to complete your payment</p>
+            <button onclick="closeQRModal()" style="width: 100%; padding: 0.75rem; background: #6c63ff; color: white; border: none; border-radius: 8px; cursor: pointer;">Done</button>
+        </div>
+    </div>
+
+    <script>
+        const studentId = localStorage.getItem('studentId');
+
+        function getStatusStyle(status) {
+            const baseStyle = 'status-badge ';
+            switch(status) {
+                case 'Pending':
+                    return baseStyle + 'background-color: #fff3cd; color: #856404;';
+                case 'Accepted':
+                    return baseStyle + 'background-color: #d4edda; color: #155724;';
+                case 'Delivered':
+                    return baseStyle + 'background-color: #cce5ff; color: #004085;';
+                default:
+                    return baseStyle + 'background-color: #f8d7da; color: #721c24;';
+            }
+        }
+
+        function getTokenStyle(status) {
+            switch(status) {
+                case 'Pending':
+                    return 'background: linear-gradient(135deg, #FFA726, #FF7043)';
+                case 'Accepted':
+                    return 'background: linear-gradient(135deg, #66BB6A, #43A047)';
+                case 'Delivered':
+                    return 'background: linear-gradient(135deg, #42A5F5, #1E88E5)';
+                default:
+                    return 'background: linear-gradient(135deg, #AB47BC, #8E24AA)';
+            }
+        }
+
+        async function fetchOrders() {
+            if (!studentId) {
+                alert('User not logged in');
+                window.location.href = '/login';
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:4000/orders/${studentId}`);
+                if (!response.ok) throw new Error('Failed to fetch orders');
+                
+                const orders = await response.json();
+                const sortedOrders = orders.sort((a, b) => 
+                    new Date(b.createdAt) - new Date(a.createdAt)
+                );
+                
+                renderOrders(sortedOrders);
+            } catch (error) {
+                console.error('Error:', error);
+                document.querySelector('.table-container').innerHTML = 
+                    '<p style="text-align: center; padding: 2rem;">Error loading orders</p>';
+            }
+        }
+
+        function renderOrders(orders) {
+            const tableBody = document.getElementById('orderTableBody');
+            let orderHTML = '';
+
+            orders.forEach(order => {
+                const date = new Date(order.createdAt);
+                orderHTML += `
+                    <tr>
+                        <td>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <div style="font-weight: 500; color: #2d3748;">
+                                    ${date.toLocaleDateString()}
+                                </div>
+                                <div style="font-size: 0.875rem; color: #718096;">
+                                    ${date.toLocaleTimeString()}
+                                </div>
+                            </div>
+                        </td>
+                        <td>${order.itemTitle}</td>
+                        <td>${order.quantity}</td>
+                        <td style="font-weight: 600; color: #2d3748;">₹${order.orderPrice}</td>
+                        <td><div style="${getStatusStyle(order.status)}">${order.status}</div></td>
+                        <td>
+                            <div class="token-container" style="${getTokenStyle(order.status)}">
+                                <span style="font-family: monospace; font-size: 1.1rem; letter-spacing: 1px;">
+                                    ${order._id.slice(-6).toUpperCase()}
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            ${order.status === 'Accepted' ? 
+                                `<button class="payment-btn" onclick="showQRModal()">Show Payment QR</button>` : 
+                                ''}
+                        </td>
+                        
+                    </tr>
+                `;
+            });
+
+            tableBody.innerHTML = orderHTML;
+        }
+
+        function showQRModal() {
+            document.getElementById('qrModal').style.display = 'flex';
+        }
+
+        function closeQRModal() {
+            document.getElementById('qrModal').style.display = 'none';
+        }
+
+        async function downloadReceipt(order) {
+            const receiptDiv = document.createElement('div');
+            receiptDiv.style.padding = '20px';
+            receiptDiv.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)';
+            receiptDiv.style.width = '300px';
+            receiptDiv.style.position = 'fixed';
+            receiptDiv.style.left = '-9999px';
+            
+            receiptDiv.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h2 style="color: #333; margin: 0;">Campus Café</h2>
+                    <p style="color: #666; margin: 5px 0;">Order Receipt</p>
+                </div>
+                <div style="border-top: 2px dashed #ddd; border-bottom: 2px dashed #ddd; padding: 15px 0; margin: 15px 0;">
+                    <h3 style="color: #333; margin: 0 0 10px 0;">${order.itemTitle}</h3>
+                    <p style="color: #666; margin: 5px 0;">Order ID: ${order._id}</p>
+                    <p style="color: #666; margin: 5px 0;">Quantity: ${order.quantity}</p>
+                    <p style="color: #666; margin: 5px 0;">Total Price: ₹${order.orderPrice}</p>
+                    <p style="color: #666; margin: 5px 0;">Status: ${order.status}</p>
+                </div>
+                <div style="text-align: center; color: #666; font-size: 0.9em;">
+                    <p style="margin: 5px 0;">Thank you for your order!</p>
+                    <p style="margin: 5px 0;">Order Date: ${new Date(order.createdAt).toLocaleString()}</p>
+                    <p style="margin: 10px 0; color: #ff6b6b; font-weight: bold;">
+                        ⏰ Please collect your order within 1 hour
+                    </p>
+                </div>
+            `;
+
+            document.body.appendChild(receiptDiv);
+
+            try {
+                const canvas = await html2canvas(receiptDiv, {
+                    scale: 2,
+                    backgroundColor: null,
+                });
+
+                const link = document.createElement('a');
+                link.download = `order-receipt-${order._id}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch (error) {
+                console.error('Error generating receipt:', error);
+                alert('Failed to generate receipt');
+            } finally {
+                document.body.removeChild(receiptDiv);
+            }
+        }
+
+        // Load orders when page loads
+        document.addEventListener('DOMContentLoaded', fetchOrders);
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>

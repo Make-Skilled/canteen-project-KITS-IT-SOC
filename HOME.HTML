@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KITS Canteen Home Page</title>
+    <style>
+        /* Global reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            /* background: linear-gradient(135deg, #FF6347, #FFD700); */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Scrollable body */
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Header Styling */
+        header {
+            width: 100%;
+            height: 80px; /* Fixed height for header */
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .canteen-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .header-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            position: relative;
+        }
+
+        .header-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .header-links a:hover {
+            color: #3498db;
+        }
+
+        /* Profile picture with dark background */
+        .profile-picture {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-image: url('https://via.placeholder.com/40'); 
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Dropdown menu */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background-color: #34495e;
+            width: 150px;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 20;
+        }
+
+        .dropdown-menu a {
+            padding: 10px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #2980b9;
+        }
+
+        /* Main Content Section */
+        .container {
+            width: 100%;
+            height: 70vh; /* Content takes the remaining space */
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            /* border-radius: 20px; */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-top: 80px; /* To remove space between header and content */
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-evenly;
+            margin-top: 20px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            background-color: #3498db;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Button specific colors */
+        .student-btn {
+            background-color: #27ae60;
+        }
+
+        .owner-btn {
+            background-color: #e74c3c;
+        }
+
+        /* 3D effect animation */
+        .button:active {
+            transform: scale(0.95);
+        }
+
+        /* About Us Section Styling */
+        .about-us-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            align-items: center;
+        }
+
+        .about-us {
+            flex: 1;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-us h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .about-us p {
+            font-size: 1.2rem;
+            color: #34495e;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .about-us img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .about-us-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .quote {
+            font-style: italic;
+            color: #3498db;
+            margin-top: 30px;
+            font-size: 1.5rem;
+        }
+
+        /* Chairman and Secretary Section */
+        .team-section {
+            width: 100%;
+            padding: 50px 20px;
+            background-color: #ffffff;
+            text-align: center;
+            margin-top: 50px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        .team-members {
+             display: flex;
+             margin-left: 475px;
+           
+             gap: 30px; 
+            flex-wrap: wrap;
+        }
+
+        .team-member {
+            width: 250px;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .team-member img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .team-member h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+
+        .team-member p {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+
+        /* Footer Styling */
+        footer {
+            width: 100%;
+            padding: 30px 20px;
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        footer h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+
+        footer .contact-info div {
+            font-size: 1rem;
+        }
+
+        footer .contact-info div span {
+            font-weight: bold;
+        }
+
+        footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+                @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes move {
+            0% {
+                transform: translate3d(0, 0, 0);
+            }
+
+            50% {
+                transform: translate3d(15px, 0, 0);
+            }
+
+            100% {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        @keyframes moveBackground {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo-container">
+            <img src="https://universitykart.b-cdn.net/Content/upload/admin/bczdhtjv.3tp.png" alt="Logo"> <!-- Placeholder logo -->
+            <span class="canteen-name">KITS CANTEEN</span>
+        </div>
+        <div class="header-links">
+            <a href="#about-us">About Us</a>
+            <a href="#contact">Contact</a>
+            <!-- Profile Picture with Dropdown -->
+            <!-- <div class="profile-picture" onclick="toggleDropdown()"></div> -->
+            <!-- Dropdown Menu -->
+            <!-- <div class="dropdown-menu" id="dropdownMenu">
+            </div> -->
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <div class="container">
+        <h1><span>Welcome to Our Canteen!</span></h1>
+        <p style="font-size: 1.5rem; margin-bottom: 30px; color: #34495e;">
+            Choose your role to get started:
+        </p>
+        <div class="buttons">
+           <a href="studentlogin.html"> <button class="button student-btn">Sign In for Students</button></a>
+           <a href="ownerlogin.html"> <button class="button owner-btn">Sign In for Owners</button></a>
+        </div>
+    </div>
+
+    <!-- About Us Section -->
+    <div class="about-us-container" id="about-us">
+        <div class="about-us">
+            <h2>About KITS College Canteen</h2>
+            <p>
+                At KITS College Canteen, we are dedicated to providing fresh, healthy, and delicious food options for students and staff. Our canteen offers a variety of meals that cater to all tastes and preferences, from quick snacks to full meals. We strive to create a comfortable and vibrant space where everyone can enjoy good food and connect with each other.
+            </p>
+            <p class="quote">
+                "Good food brings people together." - Anonymous
+            </p>
+            <p>
+                Our canteen is not just a place to eat; it's a community hub where friendships are made, and ideas are shared. We believe that food is the cornerstone of a happy college experience, and we aim to make every meal an enjoyable one.
+            </p>
+            <p class="quote">
+                "The best way to learn is by sharing a meal." - Unknown
+            </p>
+        </div>
+        <div class="about-us-image">
+            <img src="https://via.placeholder.com/400" alt="Canteen Image">
+        </div>
+    </div>
+
+    <!-- Chairman and Secretary Section -->
+    <div class="team-section" id="team">
+        <h2> Founders</h2>
+        <div class="team-members">
+            <!-- Chairman -->
+            <div class="team-member">
+                <img src="https://www.kitsguntur.ac.in/admin/up_files/chairman.jpg" alt="Chairman"> <!-- Placeholder image -->
+                <h3>Sri Koye SubbaRao</h3>
+                <!-- <p>Chairman</p> -->
+            </div>
+            <!-- Secretary -->
+            <div class="team-member">
+                <img src="https://www.kitsguntur.ac.in/admin/up_files/secretary.jpg" alt="Secretary"> <!-- Placeholder image -->
+                <h3>Sri Koye Sekhar</h3>
+                <!-- <p>Secretary</p> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer id="contact">
+        <h3>Contact Us</h3>
+        <div class="contact-info">
+            <div>
+                <p><span>Phone:</span> +1 234 567 890</p>
+                          </div>
+            <div>
+                <p><span>Email:</span> <a href="mailto:canteen@kits.edu">canteen@kits.edu</a></p>
+                <p><span>Address:</span> KITS College,Vinjanampadu, Vatticherukuru Mandal,
+                    Guntur, Andhra Pradesh 522017
+                    
+                    </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script to Toggle Dropdown -->
+    <script>
+        function toggleDropdown() {
+            var dropdown = document.getElementById('dropdownMenu');
+            // Toggle dropdown visibility
+            dropdown.style.display = (dropdown.style.display === 'block' ? 'none' : 'block');
+        }
+
+        // Close dropdown if clicked outside
+        window.onclick = function(event) {
+            var dropdown = document.getElementById('dropdownMenu');
+            if (!event.target.matches('.profile-picture') && !event.target.matches('.dropdown-menu')) {
+                dropdown.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>

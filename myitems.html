@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage My Items</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: #f4f7fc;
+        perspective: 1000px;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        background-color: #333;
+        color: white;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 24px;
+        font-weight: bold;
+        border-bottom: 2px solid #555;
+        z-index: 1000;
+      }
+      header img {
+        height: 50px;
+        margin-right: 15px;
+      }
+      .header-title {
+        display: flex;
+        align-items: center;
+      }
+      /* Dropdown Menu */
+      .dropdown {
+        position: relative;
+        display: inline-block;
+        margin-left: auto; /* Align dropdown to the right */
+      }
+      .dropdown-btn {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: transform 0.3s ease;
+      }
+      .dropdown-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #333;
+        min-width: 160px;
+        z-index: 1;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        top: 35px;
+      }
+      .dropdown-content a {
+        color: white;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+      }
+      .dropdown-content a:hover {
+        background-color: #ddd;
+        color: black;
+      }
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+      .dashboard {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        font-size: 28px;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .item-list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .item-card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .item-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+      .item-card img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+      }
+      .item-info {
+        margin-top: 10px;
+      }
+      .item-info h3 {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 10px;
+      }
+      .item-info p {
+        color: #666;
+      }
+      .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+      .button-container button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .button-container button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      .edit-btn {
+        background-color: #ff9800;
+      }
+      .delete-btn {
+        background-color: #f44336;
+      }
+      .edit-form {
+        display: none;
+        margin-top: 20px;
+      }
+      .edit-form input,
+      .edit-form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .edit-form button {
+        background-color: #2196f3;
+        border-radius: 5px;
+        color: white;
+      }
+      .edit-form button:hover {
+        transform: translateY(-3px);
+      }
+      /* Star Rating Style */
+      .star-rating {
+        display: flex;
+        gap: 5px;
+        cursor: pointer;
+      }
+      .star-rating i {
+        font-size: 24px;
+        color: #ddd;
+        transition: color 0.3s ease;
+      }
+      .star-rating i.selected {
+        color: #ffd700;
+      }
+      .star-rating i:hover,
+      .star-rating i.selected:hover {
+        color: #ffda44;
+        transform: scale(1.2);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-title">
+        <img src="logo.png" alt="Logo" />
+        <span>KITS CANTEEN</span>
+      </div>
+      <!-- Dropdown Menu on Right Side -->
+      <div class="dropdown">
+        <button class="dropdown-btn">Menu</button>
+        <div class="dropdown-content">
+          <a href="ownerdashboard.html">Dashboard</a>
+          <a href="">+ Add Items</a>
+          <a href="HOME.HTML">Logout</a>
+        </div>
+      </div>
+    </header>
+    <div class="dashboard">
+      <h1>Your Added Items</h1>
+      <div class="item-list" id="itemList">
+        <!-- Item Cards will be dynamically inserted here -->
+      </div>
+    </div>
+
+    <script>
+      const ownerId = "kitscanteen@gmail.com"; // Replace this with the actual ownerId from your app's logic
+
+      async function fetchItems() {
+        try {
+          const response = await fetch(
+            `http://localhost:4000/owneritems?ownerId=${ownerId}`
+          );
+          if (!response.ok) {
+            throw new Error("Failed to fetch items");
+          }
+
+          const items = await response.json();
+          renderItems(items);
+        } catch (error) {
+          console.error("Error fetching items:", error);
+        }
+      }
+
+      function renderItems(items) {
+        const itemListContainer = document.getElementById("itemList");
+        itemListContainer.innerHTML = ""; // Clear any existing items
+
+        if (items.length === 0) {
+          itemListContainer.innerHTML = "<p>No items found</p>";
+          return;
+        }
+
+        items.forEach((item) => {
+          const itemCard = document.createElement("div");
+          itemCard.classList.add("item-card");
+          itemCard.innerHTML = `
+                    <img src="${item.imageUrl}" alt="${item.title}">
+                    <div class="item-info">
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                        <p><strong>Price: </strong>${item.price}</p>
+                    </div>
+                    <div class="button-container">
+                        <button class="edit-btn" onclick="showEditForm('${item._id}')">Edit</button>
+                        <button class="delete-btn" onclick="deleteItem('${item._id}')">Delete</button>
+                    </div>
+                    <div class="edit-form" id="editForm${item._id}" style="display:none;">
+                        <input type="text" id="editTitle${item._id}" value="${item.title}">
+                        <textarea id="editDescription${item._id}">${item.description}</textarea>
+                        <input type="number" id="editPrice${item._id}" value="${item.price}">
+                        <input type="hidden" id="editfoodtype${item._id}" value="${item.foodType}">
+                        <input type="hidden" id="editmenu${item._id}" value="${item.menu}">
+                        <button onclick="updateItem('${item._id}')">Update</button>
+                    </div>
+                `;
+          itemListContainer.appendChild(itemCard);
+        });
+      }
+
+      async function deleteItem(itemId) {
+        try {
+          const response = await fetch(
+            `http://localhost:4000/items/${itemId}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                createdBy: ownerId, // Send the ownerId with the request
+              }),
+            }
+          );
+
+          if (response.ok) {
+            fetchItems(); // Refresh items after deletion
+          } else {
+            console.error("Failed to delete item");
+          }
+        } catch (error) {
+          console.error("Error deleting item:", error);
+        }
+      }
+
+      async function updateItem(itemId) {
+        const title = document.getElementById(`editTitle${itemId}`).value;
+        const description = document.getElementById(
+          `editDescription${itemId}`
+        ).value;
+        const price = document.getElementById(`editPrice${itemId}`).value;
+        const foodType = document.getElementById(`editfoodtype${itemId}`).value; // Corrected to itemId
+        const menu = document.getElementById(`editmenu${itemId}`).value; // Corrected to itemId
+
+        const updatedItem = {
+          title,
+          description,
+          price,
+          foodType, // Assuming the food type is Veg (or you can add a way to pick the type)
+          menu, // Assuming lunch as the default menu type (or add a way to pick menu)
+          available: true, // Assuming the item is available (or you can add a checkbox for availability)
+          createdBy: ownerId, // The ownerId should be set here
+        };
+
+        try {
+          const response = await fetch(
+            `http://localhost:4000/items/${itemId}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(updatedItem),
+            }
+          );
+
+          if (response.ok) {
+            fetchItems(); // Refresh items after update
+          } else {
+            console.error("Failed to update item");
+            const errorData = await response.json();
+            alert(`Error: ${errorData.message}`);
+          }
+        } catch (error) {
+          console.error("Error updating item:", error);
+          alert("An error occurred while updating the item.");
+        }
+      }
+
+      function showEditForm(itemId) {
+        const form = document.getElementById(`editForm${itemId}`);
+        form.style.display = "block";
+      }
+
+      // Fetch and render items on page load
+      window.onload = fetchItems;
+    </script>
+  </body>
+</html>

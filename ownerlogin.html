@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KITS Canteen Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            background: #ecf0f1;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        header {
+            width: 100%;
+            background-color: #34495e;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        header .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        header .logo img {
+            width: 40px;
+            margin-right: 10px;
+        }
+
+        /* Container for Login & Signup Forms */
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+        }
+
+        /* Welcome Section (left side) */
+        .welcome-section {
+            width: 50%;
+            height: 100%;
+            background-color: #34495e;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            transition: all 0.5s ease;
+        }
+
+        .welcome-section h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .welcome-section p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #ecf0f1;
+            margin-bottom: 20px;
+            animation: fadeIn 3s ease-in-out;
+        }
+
+        /* Sign In Form Section (right side) */
+        .login-form,
+        .signup-form {
+            width: 50%;
+            height: 100%;
+            padding: 40px;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation-duration: 1.5s;
+            animation-timing-function: ease-in-out;
+        }
+
+        /* Initially hide the signup form */
+        .signup-form {
+            display: none;
+            animation-name: slideInRight;
+        }
+
+        .login-form {
+            display: block;
+            animation-name: slideInLeft;
+        }
+
+        .login-form h2,
+        .signup-form h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .input-field {
+            margin-bottom: 20px;
+            position: relative;
+            width: 100%;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            border: 2px solid #3498db;
+            outline: none;
+            transition: 0.3s ease;
+        }
+
+        .input-field input:focus {
+            border-color: #2980b9;
+            box-shadow: 0 0 5px #2980b9;
+        }
+
+        .input-field label {
+            position: absolute;
+            left: 20px;
+            top: 12px;
+            font-size: 1rem;
+            color: #7f8c8d;
+            transition: 0.3s ease;
+        }
+
+        .input-field input:focus + label,
+        .input-field input:valid + label {
+            top: -10px;
+            font-size: 0.9rem;
+            color: #2980b9;
+        }
+
+        .submit-btn {
+            padding: 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            width: 100%;
+            max-width: 250px;
+        }
+
+        .submit-btn:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .signup-link {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .signup-link a {
+            color: #2980b9;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Animation for fading in elements */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animation for sliding in the forms */
+        @keyframes slideInLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            0% {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOutLeft {
+            0% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        @keyframes slideOutRight {
+            0% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://via.placeholder.com/40" alt="Logo"> KITS CANTEEN
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Welcome Section (left side) -->
+        <div class="welcome-section" id="welcome-section">
+            <h2>KITS CANTEEN PORTAL</h2>
+            <p>Welcome to the KITS Canteen Portal. Here, canteen owners can manage their accounts, track orders, and make updates to the menu. Join our community of owners who provide great food to students.</p>
+        </div>
+
+        <!-- Canteen Owner Sign-in Form Section (right side) -->
+        <div class="login-form">
+            <h2>Canteen Owner Sign In</h2>
+            <form id="login-form">
+                <div class="input-field">
+                    <input type="email" id="login-email" required>
+                    <label for="login-email">Owner Email</label>
+                </div>
+                <div class="input-field">
+                    <input type="password" id="login-password" required>
+                    <label for="login-password">Password</label>
+                </div>
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+            <div class="signup-link">
+                <p>New to KITS Canteen? <a href="#" onclick="toggleForms()">Sign up here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to toggle between login and signup forms
+        function toggleForms() {
+            const loginForm = document.querySelector('.login-form');
+            const signupForm = document.querySelector('.signup-form');
+            const welcomeSection = document.querySelector('#welcome-section');
+
+            if (loginForm.style.display === 'none') {
+                loginForm.style.display = 'block';
+                signupForm.style.display = 'none';
+                welcomeSection.innerHTML = `
+                    <h2>KITS CANTEEN PORTAL</h2>
+                    <p>Welcome to the KITS Canteen Portal. Here, canteen owners can manage their accounts, track orders, and make updates to the menu. Join our community of owners who provide great food to students.</p>
+                `;
+            } else {
+                loginForm.style.display = 'none';
+                signupForm.style.display = 'block';
+                welcomeSection.innerHTML = `
+                    <h2>Come and Join Our Family of Food Enthusiasts</h2>
+                    <p>"Good food brings people together, and as a KITS Canteen Owner, you become a part of our vibrant community. Share your culinary creations, serve great food, and bring joy to students and staff alike. The KITS Canteen Portal is here to empower you with the tools you need to manage your business efficiently and make the most out of your canteen services. Be a part of our growing family today!"</p>
+                    <p>Ready to serve? Sign up now and start your journey as a KITS Canteen Owner.</p>
+                `;
+            }
+        }
+
+        // Login Form Submission
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            const response = await fetch('http://localhost:4000/ownerlogin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert('Login successful!');
+                window.location.href = 'ownerdashboard.html'; // Redirect to the dashboard
+            } else {
+                alert(`Login failed: ${data.message}`);
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>

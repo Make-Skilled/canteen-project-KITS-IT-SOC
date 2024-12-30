@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            padding-top: 80px;
+        }
+
+        /* Header Style */
+        .header {
+            width: 100%;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        .header .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .header .logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .header .profile {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .header .profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .header .dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 45px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+            z-index: 15;
+        }
+
+        .header .dropdown a {
+            display: block;
+            padding: 10px;
+            color: #2c3e50;
+            text-decoration: none;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header .dropdown a:last-child {
+            border-bottom: none;
+        }
+
+        .header .dropdown a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .header .profile:hover .dropdown {
+            display: block;
+        }
+
+        /* Cart Section Style */
+        .cart-container {
+            width: 80%;
+            max-width: 1200px;
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 100px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .cart-header h2 {
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .cart-header .cart-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .cart-items {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-details h3 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-details p {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 120px;
+        }
+
+        .quantity {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity button {
+            padding: 5px 10px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .quantity button:hover {
+            background-color: #2980b9;
+        }
+
+        .cart-item-actions .price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .cart-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 2px solid #ddd;
+            padding-top: 20px;
+        }
+
+        .clear-cart {
+            font-size: 1.1rem;
+            color: #e74c3c;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .clear-cart:hover {
+            color: #c0392b;
+        }
+
+        .order-button {
+            padding: 12px 30px;
+            background-color: #3498db;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .order-button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .empty-cart-message {
+            font-size: 1.5rem;
+            color: #7f8c8d;
+            text-align: center;
+            margin-top: 50px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <img src="https://via.placeholder.com/40" alt="Logo">
+            <span>Kits Canteen</span>
+        </div>
+        <div class="profile">
+            <img src="https://via.placeholder.com/40" alt="Profile Picture">
+            <div class="dropdown">
+                <a href="studentdashboard.html">Dashboard</a>
+                <a href="myorders.html">Orders</a>
+                <a href="HOME.HTML">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart -->
+    <div class="cart-container">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <div class="cart-total">Total: ₹0</div>
+        </div>
+
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be inserted here dynamically -->
+        </div>
+
+        <div class="cart-footer">
+            <span class="clear-cart" onclick="clearCart()">Clear Cart</span>
+            <button class="order-button" onclick="order()">Place Order</button>
+        </div>
+    </div>
+
+    <div class="empty-cart-message" id="emptyCartMessage" style="display: none;">
+        Your cart is empty. Add some items to the cart!
+    </div>
+
+    <script>
+        let cart = [
+            {
+                name: "Idly",
+                price: 30,
+                image: "https://via.placeholder.com/80?text=Idly",
+                quantity: 1,
+            },
+            {
+                name: "Plain Dosa",
+                price: 50,
+                image: "https://via.placeholder.com/80?text=Paindosa",
+                quantity: 2,
+            }
+        ];
+
+        function renderCart() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartTotal = document.querySelector('.cart-total');
+            cartItemsContainer.innerHTML = "";
+
+            if (cart.length === 0) {
+                document.getElementById('emptyCartMessage').style.display = 'block';
+                cartTotal.textContent = 'Total: ₹0';
+                return;
+            }
+
+            document.getElementById('emptyCartMessage').style.display = 'none';
+
+            let totalAmount = 0;
+
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('cart-item');
+
+                itemElement.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-details">
+                        <h3>${item.name}</h3>
+                        <p>Quantity: ${item.quantity}</p>
+                    </div>
+                    <div class="cart-item-actions">
+                        <div class="quantity">
+                            <button onclick="updateQuantity('${item.name}', -1)">-</button>
+                            <span>${item.quantity}</span>
+                            <button onclick="updateQuantity('${item.name}', 1)">+</button>
+                        </div>
+                        <div class="price">₹${item.price * item.quantity}</div>
+                    </div>
+                `;
+
+                cartItemsContainer.appendChild(itemElement);
+                totalAmount += item.price * item.quantity;
+            });
+
+            cartTotal.textContent = `Total: ₹${totalAmount}`;
+        }
+
+        function updateQuantity(itemName, delta) {
+            const item = cart.find(i => i.name === itemName);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.name !== itemName);
+                }
+                renderCart();
+            }
+        }
+
+        function clearCart() {
+            cart = [];
+            renderCart();
+        }
+
+        function order() {
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+            } else {
+                alert("Your order has been placed!");
+            }
+        }
+
+        renderCart();
+    </script>
+
+</body>
+
+</html>

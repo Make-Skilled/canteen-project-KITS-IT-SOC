@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Ordering</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f6f9;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #34495e;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Left Side (Logo) */
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo img {
+            width: 40px;
+            margin-right: 10px;
+        }
+
+        /* Right Side (Profile and Cart) */
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #fff;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            min-width: 160px;
+            z-index: 1;
+            border-radius: 5px;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Cart Icon */
+        .cart-icon {
+            margin-left: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Animated Buttons */
+        .category-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .category-button {
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-5px);
+        }
+
+        .category-button:focus {
+            outline: none;
+        }
+
+        /* Menu Item Styles */
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 80%;
+            height: 80%;
+        }
+
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            width: 100%;
+            padding: 30px;
+        }
+
+        .menu-item {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            transform: scale(1.05);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .menu-item-info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .menu-item-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .menu-item-info p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #7f8c8d;
+        }
+
+        .menu-item-info .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .menu-item-info .rating {
+            font-size: 1.1rem;
+            color: #f39c12;
+        }
+
+        .add-to-cart-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .menu-items {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <img src="https://via.placeholder.com/40" alt="Logo"> KITS CANTEEN
+        </div>
+        <div class="user-profile">
+            <div class="profile-pic">
+                <img src="https://via.placeholder.com/40" alt="Profile">
+            </div>
+            <div class="dropdown">
+                <span id="greeting">Hi, Student!</span>
+                <div class="dropdown-content">
+                    <a href="myorders.html">Orders</a>
+                    <a href="HOME.HTML" id="logoutBtn">Logout</a>
+                </div>
+            </div>
+            <div class="cart-icon">
+                <a href="myorders.html"> 🛒</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Category Buttons Section -->
+    <div class="category-buttons">
+        <button class="category-button" onclick="loadMenu('')">All</button>
+        <button class="category-button" onclick="loadMenu('breakfast')">Breakfast</button>
+        <button class="category-button" onclick="loadMenu('lunch')">Lunch</button>
+        <button class="category-button" onclick="loadMenu('snacks')">Snacks</button>
+    </div>
+
+    <!-- Menu Items Section -->
+    <div class="container">
+        <div class="menu-items" id="menuItems">
+            <!-- Items will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <script>
+        const studentName = localStorage.getItem('studentName');
+        const studentId = localStorage.getItem('studentId');
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+                const response = await fetch('http://localhost:4000/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    // Clear any stored user data (if using localStorage/sessionStorage)
+                    localStorage.removeItem('studentName');
+                    localStorage.removeItem('studentId');
+                    
+                    // Redirect user to the login or home page after successful logout
+                    alert('You have logged out successfully!');
+                    window.location.href = 'HOME.html';  // Change this to your login page URL
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error('Error during logout:', error);
+                alert('There was an issue logging you out. Please try again later.');
+            }
+        });
+
+        if (studentName) {
+            document.getElementById('greeting').textContent = `Hi, ${studentName}!`;
+        }
+
+        async function loadMenu(menu) {
+            try {
+                const response = await fetch(`http://localhost:4000/items?menu=${menu}`);
+                if (!response.ok) throw new Error('Failed to fetch items');
+                const items = await response.json();
+                displayMenu(items);
+            } catch (error) {
+                console.error('Error loading menu:', error);
+                document.getElementById('menuItems').innerHTML = '<p>Error loading menu items.</p>';
+            }
+        }
+
+        function displayMenu(items) {
+            const menuContainer = document.getElementById('menuItems');
+            menuContainer.innerHTML = ''; // Clear existing items
+
+            items.forEach(item => {
+                const menuItem = document.createElement('div');
+                menuItem.className = 'menu-item';
+                menuItem.innerHTML = `
+                    <img src="${item.imageUrl}" alt="${item.title}">
+                    <div class="menu-item-info">
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                        <div class="price">₹${item.price}</div>
+                        <div>
+                            <label for="quantity-${item._id}">Quantity:</label>
+                            <input type="number" id="quantity-${item._id}" value="1" min="1" style="width: 60px; padding: 8px; font-size: 1rem; text-align: center; 
+           border: 2px solid #3498db; border-radius: 5px; background-color: #fff; 
+           color: #333; transition: all 0.3s ease;">
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <button class="add-to-cart-btn" onclick="placeOrder('${item._id}', '${item.title}', ${item.price})">Order</button>
+                        </div>
+                    </div>
+                `;
+                menuContainer.appendChild(menuItem);
+            });
+        }
+
+        async function placeOrder(itemId, itemTitle, itemPrice) {
+            const quantityInput = document.getElementById(`quantity-${itemId}`);
+            const quantity = parseInt(quantityInput.value, 10);
+
+            if (isNaN(quantity) || quantity <= 0) {
+                alert('Please enter a valid quantity.');
+                return;
+            }
+
+            const totalPrice = quantity * itemPrice;
+
+            const orderData = {
+                itemId,
+                quantity,
+                orderedBy: studentId, // Assume the studentId is stored in localStorage
+            };
+
+            try {
+                const response = await fetch('http://localhost:4000/order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData),
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert(`Order placed successfully! Item: ${itemTitle}, Total: ₹${totalPrice}`);
+                } else {
+                    alert(`Failed to place order: ${result.message}`);
+                }
+            } catch (error) {
+                console.error('Error placing order:', error);
+                alert('Error placing the order. Please try again later.');
+            }
+        }
+
+        // Load all items on initial page load
+        window.onload = () => {
+            loadMenu('');
+        };
+    </script>
+</body>
+
+</html>
