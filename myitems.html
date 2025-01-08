@@ -218,7 +218,7 @@
       async function fetchItems() {
         try {
           const response = await fetch(
-            `http://localhost:4000/owneritems?ownerId=${ownerId}`
+            `https://kitscanteenbackend.makeskilled.com/owneritems?ownerId=${ownerId}`
           );
           if (!response.ok) {
             throw new Error("Failed to fetch items");
@@ -270,7 +270,7 @@
       async function deleteItem(itemId) {
         try {
           const response = await fetch(
-            `http://localhost:4000/items/${itemId}`,
+            `https://kitscanteenbackend.makeskilled.com/items/${itemId}`,
             {
               method: "DELETE",
               headers: {
@@ -313,7 +313,7 @@
 
         try {
           const response = await fetch(
-            `http://localhost:4000/items/${itemId}`,
+            `https://kitscanteenbackend.makeskilled.com/items/${itemId}`,
             {
               method: "PUT",
               headers: { "Content-Type": "application/json" },

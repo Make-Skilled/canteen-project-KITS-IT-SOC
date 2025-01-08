@@ -285,7 +285,7 @@
         const studentId = localStorage.getItem('studentId');
         document.getElementById('logoutBtn').addEventListener('click', async () => {
             try {
-                const response = await fetch('http://localhost:4000/logout', {
+                const response = await fetch('https://kitscanteenbackend.makeskilled.com/logout', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -316,7 +316,7 @@
 
         async function loadMenu(menu) {
             try {
-                const response = await fetch(`http://localhost:4000/items?menu=${menu}`);
+                const response = await fetch(`https://kitscanteenbackend.makeskilled.com/items?menu=${menu}`);
                 if (!response.ok) throw new Error('Failed to fetch items');
                 const items = await response.json();
                 displayMenu(items);
@@ -372,7 +372,7 @@
             };
 
             try {
-                const response = await fetch('http://localhost:4000/order', {
+                const response = await fetch('https://kitscanteenbackend.makeskilled.com/order', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
