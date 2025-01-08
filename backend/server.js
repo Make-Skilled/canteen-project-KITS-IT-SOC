@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cors());
 
 
-const DATABASE_URL = "mongodb://127.0.0.1:17017/canteenDB";
+const DATABASE_URL = "mongodb://127.0.0.1:17017/KITS-SOC-canteen";
 
 // Connect to MongoDB without deprecated options
 mongoose.connect(DATABASE_URL)
