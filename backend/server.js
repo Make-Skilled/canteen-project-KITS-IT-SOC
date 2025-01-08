@@ -44,7 +44,9 @@ app.post('/studentregister', async (req, res) => {
 });
 
 
-
+app.get("/", (req, res) => {
+  res.send("API server is running");
+});
 
 // User Login
 app.post('/login', async (req, res) => {
