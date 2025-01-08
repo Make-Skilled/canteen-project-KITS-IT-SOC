@@ -398,7 +398,7 @@ app.post('/logout', async (req, res) => {
 
 
 // Start the server
-const PORT = 4000;
+const PORT = 3003;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
