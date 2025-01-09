@@ -160,13 +160,198 @@
         .qr-code img {
             width: 80px;
             height: 80px;
-        }
+        }/* Add these responsive styles to your existing CSS */
+
+/* General responsive adjustments */
+@media screen and (max-width: 1200px) {
+    .dashboard {
+        padding: 15px;
+        margin: 15px auto;
+    }
+}
+
+/* Tablet and smaller desktop screens */
+@media screen and (max-width: 992px) {
+    header {
+        padding: 12px;
+        font-size: 20px;
+    }
+    
+    header img {
+        height: 40px;
+    }
+    
+    .header-buttons button {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+    
+    table {
+        font-size: 14px;
+    }
+    
+    .order-actions button {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+}
+
+/* Large mobile devices */
+@media screen and (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .header-title {
+        justify-content: center;
+    }
+    
+    .header-buttons {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Make table scrollable horizontally */
+    .orders {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -15px;
+        padding: 0 15px;
+    }
+    
+    table {
+        min-width: 650px;
+    }
+    
+    .qr-code img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* Small mobile devices */
+@media screen and (max-width: 480px) {
+    header {
+        padding: 10px;
+        font-size: 18px;
+    }
+    
+    header img {
+        height: 35px;
+    }
+    
+    .header-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .header-buttons button {
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    h2 {
+        font-size: 20px;
+    }
+    
+    table {
+        min-width: 450px;
+        font-size: 13px;
+    }
+    
+    .order-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .order-actions button {
+        width: 100%;
+        margin: 0;
+    }
+    
+    .qr-code img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* Print styles for better printing */
+@media print {
+    header {
+        position: static;
+        background: none;
+        color: black;
+        border-bottom: 1px solid #000;
+    }
+    
+    .header-buttons {
+        display: none;
+    }
+    
+    .order-actions button {
+        display: none;
+    }
+    
+    @page {
+        margin: 2cm;
+    }
+    
+    table {
+        page-break-inside: avoid;
+    }
+    
+    .status {
+        color: black !important;
+    }
+}
+
+/* High-DPI screen optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Support for dark mode */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+    
+    table th {
+        background-color: #333;
+    }
+    
+    table th, table td {
+        border-color: #444;
+    }
+    
+    h1 {
+        color: #ffffff;
+    }
+}
+
+/* Ensure smooth animations on devices that support it */
+@media (prefers-reduced-motion: no-preference) {
+    .header-buttons button:hover {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+}
     </style>
 </head>
 <body>
     <header>
         <div class="header-title">
-            <img src="logo.png" alt="Logo">
+            <img src="https://universitykart.b-cdn.net/Content/upload/admin/bczdhtjv.3tp.png" alt="Logo">
             <span>KITS CANTEEN</span>
         </div>
         <div class="header-buttons">
