@@ -343,6 +343,144 @@
                 transform: translateX(100%);
             }
         }
+        /* Add these media queries to your existing CSS while keeping all your original CSS intact */
+
+/* Responsive styles for smaller screens */
+@media screen and (max-width: 1024px) {
+    .team-members {
+        margin-left: 200px;
+        margin-right: 200px;
+    }
+    
+    .about-us-container {
+        flex-direction: column;
+    }
+    
+    .about-us-image img {
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    /* Header adjustments */
+    header {
+        padding: 10px;
+        height: auto;
+    }
+    
+    .header-links {
+        gap: 15px;
+    }
+    
+    .canteen-name {
+        font-size: 1.4rem;
+    }
+    
+    /* Container adjustments */
+    .container {
+        margin-top: 100px;
+        height: auto;
+        min-height: 70vh;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    /* Buttons */
+    .buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .button {
+        width: 80%;
+        max-width: 300px;
+    }
+    
+    /* Team section */
+    .team-members {
+        margin-left: 50px;
+        margin-right: 50px;
+    }
+    
+    .team-member {
+        width: 200px;
+    }
+    
+    /* About section */
+    .about-us p {
+        font-size: 1.1rem;
+    }
+    
+    .quote {
+        font-size: 1.3rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    /* Header */
+    .logo-container img {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .canteen-name {
+        font-size: 1.2rem;
+    }
+    
+    .header-links {
+        gap: 10px;
+    }
+    
+    .header-links a {
+        font-size: 0.9rem;
+    }
+    
+    /* Main content */
+    h1 {
+        font-size: 2rem;
+    }
+    
+    /* Team section */
+    .team-members {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    
+    .team-member {
+        width: 180px;
+    }
+    
+    /* Footer */
+    footer h3 {
+        font-size: 1.8rem;
+    }
+    
+    .contact-info div {
+        font-size: 0.9rem;
+    }
+}
+
+/* Fix for very small screens */
+@media screen and (max-width: 320px) {
+    .canteen-name {
+        font-size: 1rem;
+    }
+    
+    .button {
+        width: 90%;
+        font-size: 1rem;
+        padding: 12px 20px;
+    }
+    
+    .team-member {
+        width: 160px;
+    }
+}
     </style>
 </head>
 
